@@ -21,7 +21,7 @@ import torch.backends.cudnn as cudnn
 FILE = Path(__file__).absolute()
 sys.path.append(FILE.parents[0].as_posix())
 print(os.environ['HOME'])
-sys.path.append(os.environ['HOME'] + "/yolo_ws/install/yolov5_obb/share/yolov5_obb/scripts")
+sys.path.append(os.environ['HOME'] + "/yolo_ws/install/inspection_yolov5/share/inspection_yolov5/scripts")
 
 from models.common import DetectMultiBackend
 from utils.datasets import IMG_FORMATS, VID_FORMATS, LoadImages, LoadStreams, letterbox
@@ -41,7 +41,7 @@ class Camera_subscriber(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
 
-        weights=os.environ['HOME'] + "/yolo_ws/install/yolov5_obb/share/yolov5_obb/scripts/extintor.pt"
+        weights=os.environ['HOME'] + "/yolo_ws/install/inspection_yolov5/share/inspection_yolov5/scripts/extintor.pt"
         self.imgsz=[640, 640]  # inference size (pixels)
         self.conf_thres=0.25  # confidence threshold
         self.iou_thres=0.45  # NMS IOU threshold

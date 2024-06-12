@@ -9,5 +9,5 @@ def generate_launch_description():
             'use_sim_time',
             default_value='true',
             description='Use simulation (Gazebo) clock if true'),
-        Node(package='yolov5_obb', executable='ros_detect.py', output='screen'),
+        Node(package='inspection_yolov5', executable='ros_detect.py', output='screen'),
     ])
