@@ -5,5 +5,5 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     return LaunchDescription([
-        Node(package='yolov5_obb', executable='depth_bounding_box.py', output='screen'),
+        Node(package='inspection_yolov5', executable='depth_bounding_box.py', output='screen'),
     ])
