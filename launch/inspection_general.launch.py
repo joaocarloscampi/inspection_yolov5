@@ -21,31 +21,32 @@ def generate_launch_description():
 											default_value='false', 
 											description='Use simulation (Gazebo) clock if true')
 
-	robot_config_file = os.path.join(bringup_dir, 'config/robot_parameters.yaml')
+	robot_config_file = os.path.join(bringup_dir, 'config/inspection_parameters.yaml')
 	with open(robot_config_file, 'r') as file:
 		robotParams = yaml.safe_load(file)
 	print(robotParams)
 	
-	robot = robotParams['robot']
-	zed_scan = robotParams['zed_scan']
-	zed_camera_model = robotParams['zed_camera_model']
-	lidar = robotParams['lidar']
-	filter_lidar = robotParams['filter_lidar']
-	slam_toolbox = robotParams['slam_toolbox']
-	teleop_keyboard = robotParams['teleop_keyboard']
-	rviz_enable = robotParams['rviz']
-	amcl_localization = robotParams['amcl_localization']
+	camera_topic = robotParams['camera_topic']
+	bouding_box_topic = robotParams['bouding_box_topic']
+	visualization_detection = robotParams['visualization_detection']
 	
-	print("Robot: ", robot)
-	print("Zed scan enable: ", zed_scan)
-	print("Zed model: : ", zed_camera_model)
-	print("Lidar enable: ", lidar)
-	print("Lidar filter enable: ", filter_lidar)
-	print("slam_toolbox enable: ", slam_toolbox)
+	print("Topico da camera: ", camera_topic)
+	print("Topico da bouding boxes: ", bouding_box_topic)
+	print("Visualizacao da deteccao: ", visualization_detection)
 	
 	list_launch_description = []
 	
 	# Launches
-	
+	detection = Node(package='inspection_yolov5', 
+             executable='ros_detect.py', 
+             name='detection',
+             output='screen',
+             emulate_tty=True,
+             parameters=[
+                 {'camera_topic': camera_topic}, 
+                 {'bounding_box_topic': bouding_box_topic},
+				 {'visualization_detection': visualization_detection}
+             ])
+	list_launch_description.append(detection)
 
 	return LaunchDescription(list_launch_description)

@@ -65,6 +65,7 @@ class Camera_subscriber(Node):
         # ROS parameters
         self.declare_parameter('camera_topic', '/zedm/zed_node/left/image_rect_color')
         self.declare_parameter('bounding_box_topic', 'yolov5_ros2/bounding_boxes')
+        self.declare_parameter('visualization_detection', True)
 
         # Initialize
         self.device = select_device(device_num)
@@ -92,6 +93,8 @@ class Camera_subscriber(Node):
 
         bounding_box_topic = self.get_parameter('bounding_box_topic').get_parameter_value().string_value
         self.bboxes_pub = self.create_publisher(BoundingBoxes,bounding_box_topic, 10)
+
+        self.visualization_detection = self.get_parameter('visualization_detection').get_parameter_value().bool_value
 
     def camera_callback(self, data):
         img = bridge.imgmsg_to_cv2(data, "bgr8")
@@ -207,8 +210,9 @@ class Camera_subscriber(Node):
         
         self.bboxes_pub.publish(bboxes)
         
-        cv2.imshow("IMAGE", img0)
-        cv2.waitKey(4)    
+        if self.visualization_detection:
+            cv2.imshow("IMAGE", img0)
+            cv2.waitKey(4)
 
 if __name__ == '__main__':
     rclpy.init(args=None)

@@ -1,6 +1,10 @@
-# Options: 
+# Topico de recebimento das imagens 
 camera_topic: /zedm/zed_node/left/image_rect_color
 
 
-# Options: 
-bouding_box_topic: yolov5_ros2/bounding_boxes
+# Topico de publicar as bouding boxes
+bouding_box_topic: /yolov5_ros2/bounding_boxes
+
+
+# Habilitar janela de visualizacao
+visualization_detection: true
