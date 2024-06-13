@@ -36,6 +36,7 @@ install(
   DIRECTORY
     scripts
     launch
+    config
   DESTINATION
     share/${PROJECT_NAME}/
 )
@@ -44,8 +45,6 @@ install(
   PROGRAMS
   scripts/ros_detect.py
   scripts/depth_bounding_box.py
-  launch/launch_yolov5_obb.launch.py
-  launch/launch_depth_detection.launch.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

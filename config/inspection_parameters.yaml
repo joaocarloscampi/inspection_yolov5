@@ -1,0 +1,6 @@
+# Options: 
+camera_topic: /zedm/zed_node/left/image_rect_color
+
+
+# Options: 
+bouding_box_topic: yolov5_ros2/bounding_boxes

@@ -62,6 +62,10 @@ class Camera_subscriber(Node):
         self.augment=False  # augmented inferenc
         self.s = str()
 
+        # ROS parameters
+        self.declare_parameter('camera_topic', '/zedm/zed_node/left/image_rect_color')
+        self.declare_parameter('bounding_box_topic', 'yolov5_ros2/bounding_boxes')
+
         # Initialize
         self.device = select_device(device_num)
 
@@ -78,14 +82,16 @@ class Camera_subscriber(Node):
         # Run inference
         self.model.warmup(imgsz=(1, 3, *imgsz), half=self.half)  # warmup
 
+        camera_topic = self.get_parameter('camera_topic').get_parameter_value().string_value
         self.subscription = self.create_subscription(
             Image,
-            '/zedm/zed_node/left/image_rect_color',
+            camera_topic,
             self.camera_callback,
             10)
         self.subscription  # prevent unused variable warning
 
-        self.bboxes_pub = self.create_publisher(BoundingBoxes,"yolov5_ros2/bounding_boxes", 10)
+        bounding_box_topic = self.get_parameter('bounding_box_topic').get_parameter_value().string_value
+        self.bboxes_pub = self.create_publisher(BoundingBoxes,bounding_box_topic, 10)
 
     def camera_callback(self, data):
         img = bridge.imgmsg_to_cv2(data, "bgr8")
