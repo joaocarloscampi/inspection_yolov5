@@ -61,11 +61,14 @@ class Camera_subscriber(Node):
         self.half=False  # use FP16 half-precision inference
         self.augment=False  # augmented inferenc
         self.s = str()
+        self.flag_start = False
 
         # ROS parameters
         self.declare_parameter('camera_topic', '/zedm/zed_node/left/image_rect_color')
         self.declare_parameter('bounding_box_topic', 'yolov5_ros2/bounding_boxes')
         self.declare_parameter('visualization_detection', True)
+        self.declare_parameter('publish_detection_bb', False)
+        self.declare_parameter('publish_detection_bb_topic', 'yolov5_ros2/image_detection')
 
         # Initialize
         self.device = select_device(device_num)
@@ -93,6 +96,11 @@ class Camera_subscriber(Node):
 
         bounding_box_topic = self.get_parameter('bounding_box_topic').get_parameter_value().string_value
         self.bboxes_pub = self.create_publisher(BoundingBoxes,bounding_box_topic, 10)
+
+        bounding_box_topic = self.get_parameter('publish_detection_bb_topic').get_parameter_value().string_value
+        self.publish_detection_bb = self.get_parameter('publish_detection_bb').get_parameter_value().bool_value
+        if self.publish_detection_bb:
+            self.image_detect_pub = self.create_publisher(Image,bounding_box_topic, 10)
 
         self.visualization_detection = self.get_parameter('visualization_detection').get_parameter_value().bool_value
 
@@ -209,6 +217,14 @@ class Camera_subscriber(Node):
         bboxes.header.stamp = timestamp
         
         self.bboxes_pub.publish(bboxes)
+        
+        if not self.flag_start:
+            self.flag_start = True
+            self.get_logger().info('Detecção de objetos iniciada')
+
+        if self.publish_detection_bb:
+            image_message = bridge.cv2_to_imgmsg(img0, encoding="passthrough")
+            self.image_detect_pub.publish(image_message)
         
         if self.visualization_detection:
             cv2.imshow("IMAGE", img0)

@@ -7,4 +7,9 @@ bouding_box_topic: /yolov5_ros2/bounding_boxes
 
 
 # Habilitar janela de visualizacao
-visualization_detection: true
+visualization_detection: false
+
+
+# Habilitar publicacao da imagem com bouding box
+publish_detection_bb: false
+publish_detection_bb_topic: /yolov5_ros2/image_detection

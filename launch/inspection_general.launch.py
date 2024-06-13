@@ -29,10 +29,14 @@ def generate_launch_description():
 	camera_topic = robotParams['camera_topic']
 	bouding_box_topic = robotParams['bouding_box_topic']
 	visualization_detection = robotParams['visualization_detection']
+	publish_detection_bb = robotParams['publish_detection_bb']
+	publish_detection_bb_topic = robotParams['publish_detection_bb_topic']
 	
 	print("Topico da camera: ", camera_topic)
 	print("Topico da bouding boxes: ", bouding_box_topic)
 	print("Visualizacao da deteccao: ", visualization_detection)
+	print("Publicar imagem com deteccao: ", publish_detection_bb)
+	print("Topico imagem com deteccao: ", publish_detection_bb_topic)
 	
 	list_launch_description = []
 	
@@ -45,7 +49,9 @@ def generate_launch_description():
              parameters=[
                  {'camera_topic': camera_topic}, 
                  {'bounding_box_topic': bouding_box_topic},
-				 {'visualization_detection': visualization_detection}
+				 {'visualization_detection': visualization_detection},
+				 {'publish_detection_bb': publish_detection_bb},
+				 {'publish_detection_bb_topic': publish_detection_bb_topic}
              ])
 	list_launch_description.append(detection)
 
