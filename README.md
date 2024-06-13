@@ -51,13 +51,16 @@ source ~/your_ros2_wksp/install/setup.bash
 
 | Comando | Descrição |
 |---------|-----------|
-| `ros2 launch inspection_yolov5 launch_yolov5_obb.launch.py` | Inicia a detecção de objetos apresentando em uma janela pop-up |
+| `ros2 launch inspection_yolov5 inspection_general.launch.py` | Inicia a detecção de objetos apresentando em uma janela pop-up |
+| `ros2 launch inspection_yolov5 detection.launch.py` | Inicia a detecção de objetos apresentando em uma janela pop-up |
 | `ros2 launch inspection_yolov5 launch_depth_detection.launch.py` | Inicia a estimativa de posição dos objetos no mapa com base na câmera. |
 
 ## Execução dos algoritmos
-O primeiro launch apresentado é o responsável por fazer a detecção dos objetos com a rede treinada (utilizando o arquivo extintores.pt) e publicar as coordenadas da bouding boxes no tópico `yolov5_ros2/bounding_boxes`. O código `scripts/ros_detect.py` possui um parâmetro (manual por enquanto) definindo o tópico `/zedm/zed_node/left/image_rect_color` como fonte das imagens no ROS2. O script demora um pouco para iniciar, basta aguardar a janela aparecer que a detecção se inicia
+O primeiro launch é o responsável por executar a aplicação completa de detecção de objetos, aquisição da profundidade, estimativa de coordenadas em relação à camera e em relação ao mapa (por enquanto). Pode-se customizar o que deseja-se rodar a partir do arquivo `config/inspection_parameters.yaml`, como habilitar funções específicas ou mudar o nome dos tópicos a ser publicado.
 
-Já o segundo launch, a partir do código `scripts/depth_bouding_box.py` recebe as detecções do tópico `yolov5_ros2/bounding_boxes` e junta com as informações de depth do tópico `/zedm/zed_node/depth/depth_registered` e calcula a distância relativa à câmera e, na sequência, as coordenadas no mapa (TODO: Separar os launchs em detecção simples e detecção no mapa).
+O segundo launch apresentado é o responsável por fazer a detecção dos objetos com a rede treinada (utilizando o arquivo extintores.pt) e publicar as coordenadas da bouding boxes no tópico `yolov5_ros2/bounding_boxes`. O código `scripts/ros_detect.py` possui um parâmetro (manual por enquanto) definindo o tópico `/zedm/zed_node/left/image_rect_color` como fonte das imagens no ROS2. O script demora um pouco para iniciar, basta aguardar a janela aparecer que a detecção se inicia
+
+Já o terceiro launch, a partir do código `scripts/depth_bouding_box.py` recebe as detecções do tópico `yolov5_ros2/bounding_boxes` e junta com as informações de depth do tópico `/zedm/zed_node/depth/depth_registered` e calcula a distância relativa à câmera e, na sequência, as coordenadas no mapa (TODO: Separar os launchs em detecção simples e detecção no mapa).
 
 Para a detecção no mapa, algumas coisas são necessárias:
 - Toda a árvore de transformações TF do robô, da câmera e do mapa deve ser criada antes da execução deste launch;
