@@ -45,6 +45,8 @@ install(
   PROGRAMS
   scripts/ros_detect.py
   scripts/depth_bounding_box.py
+  scripts/map_coordinates.py
+  scripts/markers.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

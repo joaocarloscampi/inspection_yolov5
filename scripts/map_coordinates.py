@@ -59,8 +59,8 @@ class DepthBoundingBox(Node):
 
         # Publisher das coordenadas de detecção
         self.obj_pose_pub = self.create_publisher(
-            PoseArray,
-            "yolov5_ros2/object_depth", 
+            PointStamped,
+            "yolov5_ros2/object_pose", 
             10)
         self.obj_pose_pub  # prevent unused variable warning
 
@@ -111,9 +111,8 @@ class DepthBoundingBox(Node):
                 posearray.header = msg.header                                               # assigning header of input image msg
                 posearray.header.stamp = timestamp
 
-                self.obj_pose_pub.publish(posearray)  # Publica a mensagem de detecção
+                #self.obj_pose_pub.publish(posearray)  # Publica a mensagem de detecção
 
-        '''
         # Transformação para coordenada do mapa
         for pose in posearray.poses:
             try:
@@ -141,9 +140,10 @@ class DepthBoundingBox(Node):
                 point_robot_frame = tf2_geometry_msgs.do_transform_point(point_camera_frame, transform)
                 self.get_logger().info(f'Image point: {point_robot_frame.point.x}, {point_robot_frame.point.y}, {point_robot_frame.point.z}')
 
+                self.obj_pose_pub.publish(point_robot_frame)  # Publica a mensagem de detecção
+
             except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
                 self.get_logger().warn(f'Could not transform point: {e}')
-        '''
             
     def depth_callback(self, msg):
         depth_image = self.bridge.imgmsg_to_cv2(msg, "32FC1")  # Decodificação da informação de depth
